@@ -1,41 +1,32 @@
-import type { MetaFunction } from "@remix-run/node";
+import {
+  BarChart,
+  Bar,
+  Rectangle,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
+import { getVolumenConsumption } from "~/server/consumptionGetters"
+
+const data = getVolumenConsumption('hquarter')
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
+      <BarChart
+        data={data}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="time" />
+        <YAxis dataKey="volume" />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="volume" type="number" fill="#8884d8" activeBar={<Rectangle fill="purple" stroke="blue" />} />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
