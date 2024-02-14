@@ -25,7 +25,7 @@ export default function Index() {
         <YAxis dataKey="volume" />
         <Tooltip />
         <Legend />
-        <Bar dataKey="volume" type="number" fill="#8884d8" activeBar={<Rectangle fill="purple" stroke="blue" />} />
+        <Bar dataKey="volume" name="volume (L)" fill="#8884d8" activeBar={<Rectangle fill="purple" stroke="blue" />} />
       </BarChart>
     </ResponsiveContainer>
   );
