@@ -5,7 +5,7 @@ type SmcTimeRange = 'hquarter' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'ye
 
 type Reading = {
   time: string,
-  volume: string,
+  volume: number,
 }
 
 const subMinutes = (minutes: number, date: string | number | Date): Date => sub({
@@ -23,7 +23,7 @@ const normalizeToQuarter = (date: Date): Date => {
   return date
 }
 
-const getRealisticVolume = (personQty: number, date: Date): string => {
+const getRealisticVolume = (personQty: number, date: Date): number => {
   // provides realistic gas/water volumen consumption according to time
   const hour = date.getHours()
   const volume = hour > 22 ? minVolumen() :
@@ -32,7 +32,7 @@ const getRealisticVolume = (personQty: number, date: Date): string => {
         hour > 9 ? mediumVolumen() :
           hour > 6 ? maxVolumen() : minVolumen()
 
-  return (personQty * volume).toFixed(2)
+  return Number((personQty * volume).toFixed(2))
 }
 
 const fakeQuarter = (): Reading[]  => {
@@ -57,27 +57,27 @@ const fakeQuarter = (): Reading[]  => {
 
 const fakeHourly = (): Reading[] => [{
   time: 'fake',
-  volume: '1',
+  volume: 1,
 }]
 
 const fakeDaily = (): Reading[] => [{
   time: 'fake',
-  volume: '1',
+  volume: 1,
 }]
 
 const fakeWeekly = (): Reading[] => [{
   time: 'fake',
-  volume: '1',
+  volume: 1,
 }]
 
 const fakeMonthly = (): Reading[] => [{
   time: 'fake',
-  volume: '1',
+  volume: 1,
 }]
 
 const fakeYearly = (): Reading[] => [{
   time: 'fake',
-  volume: '1',
+  volume: 1,
 }]
 
 const volumenConsumption: Record<SmcTimeRange, () => Reading[]> = {
