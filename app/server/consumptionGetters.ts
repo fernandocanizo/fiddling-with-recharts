@@ -10,6 +10,8 @@ type Reading = {
 
 const personQty = Math.floor(Math.random() * 6) + 1
 
+const randomize = (value: number): number => value * (Math.random() * (1.1 - 0.9) + 0.9)
+
 const subMinutes = (minutes: number, date: string | number | Date): Date => sub({
   minutes,
 }, date)
@@ -157,17 +159,42 @@ const fakeMonthly = (): Reading[] => {
 
     result.push({
       time: format(dateFormat, date),
-      volume: Number((volume / 1000).toFixed(2)), // start using m3
+      volume: Number((randomize(volume) / 1000).toFixed(2)), // start using m3
     })
   }
 
   return result.reverse()
 }
 
-const fakeYearly = (): Reading[] => [{
-  time: 'fake',
-  volume: 1,
-}]
+const fakeYearly = (): Reading[] => {
+  const dateFormat = 'yyyy'
+  const result = []
+  let date = new Date()
+  date.setUTCMinutes(0)
+  date.setUTCHours(0)
+  const yearQty = 5
+
+  for (let count = 0; count < yearQty; count++) {
+    let volume = 0
+    for (let month = 0; month < 12; month++) {
+      for (let day = 0; day < 30; day++) { // not so realistic
+        for (let hour = 0; hour < 24; hour++) {
+          // fake a daily consumption by calling `getRealisticVolume` "all day"
+          volume += getRealisticVolume(personQty, date) * 4
+        }
+        date = sub1Day(date)
+      }
+    }
+
+    result.push({
+      time: format(dateFormat, date),
+      // make it a little bit random
+      volume: Number((randomize(volume) / 1000).toFixed(2)),
+    })
+  }
+
+  return result.reverse()
+}
 
 const volumenConsumption: Record<SmcTimeRange, () => Reading[]> = {
   'hquarter': fakeQuarter,
