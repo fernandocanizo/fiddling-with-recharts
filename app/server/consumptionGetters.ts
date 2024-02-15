@@ -117,29 +117,39 @@ const fakeWeekly = (): Reading[] => {
   const dateFormat = 'yyyy.ww'
   const personQty = getPersonQty()
   const result = []
-  let start = new Date()
-  start.setUTCMinutes(0)
+  let date = new Date()
+  date.setUTCMinutes(0)
+  date.setUTCHours(0)
 
   for (let count = 0; count < 60; count++) {
-    let dailyVolume = 0
+    let volume = 0
     for (let day = 0; day < 7; day++) {
       // simulate daily consumption for a week
       for (let hour = 0; hour < 24; hour++) {
         // fake a daily consumption by calling `getRealisticVolume` "all day"
-        start.setUTCHours(hour)
-        dailyVolume += getRealisticVolume(personQty, start) * 4
+        volume += getRealisticVolume(personQty, date) * 4
       }
+      date = sub1Day(date)
+    }
+
+    result.push({
+      time: format(dateFormat, date),
+      volume: Number((volume / 1000).toFixed(2)), // start using m3
+    })
+  }
+
+  return result.reverse()
+}
     }
 
     result.push({
       time: format(dateFormat, start),
-      volume: Number((dailyVolume / 1000).toFixed(2)), // start using m3
+      volume: Number(dailyVolume.toFixed(2)),
     })
     start = sub1Day(start)
   }
 
   return result.reverse()
-}
 
 const fakeMonthly = (): Reading[] => [{
   time: 'fake',
