@@ -15,10 +15,12 @@ import { getVolumenConsumption } from "~/server/consumptionGetters"
 const hquarterData = getVolumenConsumption('hquarter')
 const hourlyData = getVolumenConsumption('hourly')
 const dailyData = getVolumenConsumption('daily')
+const weeklyData = getVolumenConsumption('weekly')
 
 export default function Index() {
   return (
     <>
+      <h2>15 minutes time-span consumption</h2>
       <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
         <BarChart
           data={hquarterData}
@@ -32,6 +34,7 @@ export default function Index() {
         </BarChart>
       </ResponsiveContainer>
 
+      <h2>Hourly consumption</h2>
       <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
         <BarChart
           data={hourlyData}
@@ -45,6 +48,7 @@ export default function Index() {
         </BarChart>
       </ResponsiveContainer>
 
+      <h2>Daily consumption</h2>
       <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
         <BarChart
           data={dailyData}
@@ -55,6 +59,20 @@ export default function Index() {
           <Tooltip />
           <Legend />
           <Bar dataKey="volume" name="volume (L)" fill="#8884d8" activeBar={<Rectangle fill="purple" stroke="blue" />} />
+        </BarChart>
+      </ResponsiveContainer>
+
+      <h2>Weekly consumption</h2>
+      <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
+        <BarChart
+          data={weeklyData}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="time" />
+          <YAxis dataKey="volume" />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="volume" name="volume (m³)" fill="#8884d8" activeBar={<Rectangle fill="purple" stroke="blue" />} />
         </BarChart>
       </ResponsiveContainer>
     </>
