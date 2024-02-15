@@ -13,6 +13,7 @@ const subMinutes = (minutes: number, date: string | number | Date): Date => sub(
 }, date)
 
 const sub15Minutes = (date: string | number | Date) => subMinutes(15, date)
+const sub1Hour = (date: string | number | Date) => subMinutes(60, date)
 
 const normalizeToQuarter = (date: Date): Date => {
   const minutes = date.getMinutes()
@@ -20,6 +21,11 @@ const normalizeToQuarter = (date: Date): Date => {
     minutes >= 30 ? date.setMinutes(30) :
       minutes >= 15 ? date.setMinutes(15) : date.setMinutes(0)
 
+  return date
+}
+
+const normalizeHour = (date: Date): Date => {
+  date.setMinutes(0)
   return date
 }
 
@@ -55,10 +61,24 @@ const fakeQuarter = (): Reading[]  => {
   return result.reverse()
 }
 
-const fakeHourly = (): Reading[] => [{
-  time: 'fake',
-  volume: 1,
-}]
+const fakeHourly = (): Reading[] => {
+  const timeFormat = 'HH:00'
+  const personQty = Math.floor(Math.random() * 6) + 1
+  const result = []
+  let start = normalizeHour(new Date())
+
+  for (let count = 25; count > 0; count -= 1) {
+    const volume = getRealisticVolume(personQty, start) * 4
+
+    result.push({
+      time: format(timeFormat, start),
+      volume,
+    })
+    start = sub1Hour(start)
+  }
+
+  return result.reverse()
+}
 
 const fakeDaily = (): Reading[] => [{
   time: 'fake',
