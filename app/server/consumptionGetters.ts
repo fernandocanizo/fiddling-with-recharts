@@ -8,12 +8,17 @@ type Reading = {
   volume: number,
 }
 
+const getPersonQty = () => Math.floor(Math.random() * 6) + 1
+
 const subMinutes = (minutes: number, date: string | number | Date): Date => sub({
   minutes,
 }, date)
 
 const sub15Minutes = (date: string | number | Date) => subMinutes(15, date)
 const sub1Hour = (date: string | number | Date) => subMinutes(60, date)
+const sub1Day = (date: string | number | Date) => sub({
+  days: 1,
+}, date)
 
 const normalizeToQuarter = (date: Date): Date => {
   const minutes = date.getMinutes()
@@ -30,7 +35,8 @@ const normalizeHour = (date: Date): Date => {
 }
 
 const getRealisticVolume = (personQty: number, date: Date): number => {
-  // provides realistic gas/water volumen consumption according to time
+  // provides realistic gas/water volumen consumption according to time for a 15
+  // minutes time-span
   const hour = date.getHours()
   const volume = hour > 22 ? minVolumen() :
     hour > 20 ? mediumVolumen() :
@@ -38,13 +44,15 @@ const getRealisticVolume = (personQty: number, date: Date): number => {
         hour > 9 ? mediumVolumen() :
           hour > 6 ? maxVolumen() : minVolumen()
 
+  // make it a number again so Recharts knows how to create a proper axis to
+  // hold all range of values
   return Number((personQty * volume).toFixed(2))
 }
 
 const fakeQuarter = (): Reading[]  => {
   const timeFormat = 'HH:mm'
   // houses will have between 1 and 6 persons
-  const personQty = Math.floor(Math.random() * 6) + 1
+  const personQty = getPersonQty()
   const result = []
   let start = normalizeToQuarter(new Date())
 
@@ -63,7 +71,7 @@ const fakeQuarter = (): Reading[]  => {
 
 const fakeHourly = (): Reading[] => {
   const timeFormat = 'HH:00'
-  const personQty = Math.floor(Math.random() * 6) + 1
+  const personQty = getPersonQty()
   const result = []
   let start = normalizeHour(new Date())
 
@@ -80,10 +88,30 @@ const fakeHourly = (): Reading[] => {
   return result.reverse()
 }
 
-const fakeDaily = (): Reading[] => [{
-  time: 'fake',
-  volume: 1,
-}]
+const fakeDaily = (): Reading[] => {
+  const dateFormat = 'MM-dd'
+  const personQty = getPersonQty()
+  const result = []
+  let start = new Date()
+  start.setUTCMinutes(0)
+
+  for (let count = 0; count < 35; count++) {
+    let dailyVolume = 0
+    for (let hour = 0; hour < 24; hour++) {
+      // fake a daily consumption by calling `getRealisticVolume` "all day"
+      start.setUTCHours(hour)
+      dailyVolume += getRealisticVolume(personQty, start) * 4
+    }
+
+    result.push({
+      time: format(dateFormat, start),
+      volume: dailyVolume,
+    })
+    start = sub1Day(start)
+  }
+
+  return result.reverse()
+}
 
 const fakeWeekly = (): Reading[] => [{
   time: 'fake',
