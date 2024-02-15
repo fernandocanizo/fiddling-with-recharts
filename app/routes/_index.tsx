@@ -16,6 +16,7 @@ const hquarterData = getVolumenConsumption('hquarter')
 const hourlyData = getVolumenConsumption('hourly')
 const dailyData = getVolumenConsumption('daily')
 const weeklyData = getVolumenConsumption('weekly')
+const monthlyData = getVolumenConsumption('monthly')
 
 export default function Index() {
   return (
@@ -66,6 +67,20 @@ export default function Index() {
       <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
         <BarChart
           data={weeklyData}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="time" />
+          <YAxis dataKey="volume" />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="volume" name="volume (m³)" fill="#8884d8" activeBar={<Rectangle fill="purple" stroke="blue" />} />
+        </BarChart>
+      </ResponsiveContainer>
+
+      <h2>Monthly consumption</h2>
+      <ResponsiveContainer width="100%" height="100%" minHeight="500px" minWidth="500px">
+        <BarChart
+          data={monthlyData}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="time" />
