@@ -8,7 +8,7 @@ type Reading = {
   volume: number,
 }
 
-const getPersonQty = () => Math.floor(Math.random() * 6) + 1
+const personQty = Math.floor(Math.random() * 6) + 1
 
 const subMinutes = (minutes: number, date: string | number | Date): Date => sub({
   minutes,
@@ -52,7 +52,6 @@ const getRealisticVolume = (personQty: number, date: Date): number => {
 const fakeQuarter = (): Reading[]  => {
   const timeFormat = 'HH:mm'
   // houses will have between 1 and 6 persons
-  const personQty = getPersonQty()
   const result = []
   let start = normalizeToQuarter(new Date())
 
@@ -71,7 +70,6 @@ const fakeQuarter = (): Reading[]  => {
 
 const fakeHourly = (): Reading[] => {
   const timeFormat = 'HH:00'
-  const personQty = getPersonQty()
   const result = []
   let start = normalizeHour(new Date())
 
@@ -90,7 +88,6 @@ const fakeHourly = (): Reading[] => {
 
 const fakeDaily = (): Reading[] => {
   const dateFormat = 'MM-dd'
-  const personQty = getPersonQty()
   const result = []
   let start = new Date()
   start.setUTCMinutes(0)
@@ -115,7 +112,6 @@ const fakeDaily = (): Reading[] => {
 
 const fakeWeekly = (): Reading[] => {
   const dateFormat = 'yyyy.ww'
-  const personQty = getPersonQty()
   const result = []
   let date = new Date()
   date.setUTCMinutes(0)
@@ -143,7 +139,6 @@ const fakeWeekly = (): Reading[] => {
 
 const fakeMonthly = (): Reading[] => {
   const dateFormat = 'yyyy-MM'
-  const personQty = getPersonQty()
   const result = []
   let date = new Date()
   date.setUTCMinutes(0)
